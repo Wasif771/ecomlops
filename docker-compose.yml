@@ -14,8 +14,8 @@ services:
       - MODEL_PATH=models/iris_model.pkl
       - DRIFT_CONFIDENCE_THRESHOLD=0.65
     volumes:
-      - ./models:/app/models
-      - ./metrics:/app/metrics
+      - ./models:models
+      - ./metrics:metrics
     depends_on:
       - mlflow
     restart: unless-stopped
@@ -92,7 +92,7 @@ services:
     ports:
       - "9100:9100"
     volumes:
-      - ./metrics:/app/metrics:ro
+      - ./metrics:metrics:ro
     restart: unless-stopped
     networks:
       - ecomlops-network

@@ -9,7 +9,7 @@ import time
 import numpy as np
 
 MODEL_PATH = os.getenv("MODEL_PATH", "models/iris_model.pkl")
-METRICS_PATH = "/app/metrics/inference_metrics.json"
+METRICS_PATH = "metrics/inference_metrics.json"
 
 
 class ModelPredictor:

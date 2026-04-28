@@ -8,7 +8,7 @@ import time
 import numpy as np
 from datetime import datetime
 
-DRIFT_LOG = "/app/metrics/drift_log.json"
+DRIFT_LOG = "metrics/drift_log.json"
 ALERT_THRESHOLD = float(os.getenv("DRIFT_CONFIDENCE_THRESHOLD", "0.65"))
 
 
