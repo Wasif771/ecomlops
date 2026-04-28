@@ -20,7 +20,7 @@ on:
         default: "manual"
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: eu-north-1
   ECR_REPOSITORY: ecomlops
   EC2_HOST: ${{ secrets.EC2_HOST }}
   EC2_USER: ubuntu
