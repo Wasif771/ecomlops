@@ -11,7 +11,7 @@ services:
       - "8000:8000"
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - MODEL_PATH=/app/models/iris_model.pkl
+      - MODEL_PATH=models/iris_model.pkl
       - DRIFT_CONFIDENCE_THRESHOLD=0.65
     volumes:
       - ./models:/app/models
