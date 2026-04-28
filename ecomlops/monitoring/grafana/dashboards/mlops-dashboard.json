@@ -1,0 +1,115 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "EcoMLOps Monitoring Dashboard",
+    "tags": ["mlops"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Model Accuracy",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ml_model_accuracy",
+            "legendFormat": "Accuracy"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "F1 Score",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ml_model_f1_score",
+            "legendFormat": "F1"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Inference Latency (ms)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ml_inference_latency_seconds * 1000",
+            "legendFormat": "Latency"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Prediction Confidence",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ml_prediction_confidence",
+            "legendFormat": "Confidence"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4}
+      },
+      {
+        "id": 5,
+        "title": "Drift Detection Status",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ml_drift_detected",
+            "legendFormat": "Drift"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Total Drift Alerts",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ml_drift_alerts_total",
+            "legendFormat": "Alerts"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8}
+      },
+      {
+        "id": 7,
+        "title": "Training Time (seconds)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ml_training_time_seconds",
+            "legendFormat": "Training Time"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 12, "x": 0, "y": 12}
+      },
+      {
+        "id": 8,
+        "title": "API Request Latency Distribution",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, prediction_latency_seconds_bucket)",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, prediction_latency_seconds_bucket)",
+            "legendFormat": "P99"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "5s"
+  }
+}

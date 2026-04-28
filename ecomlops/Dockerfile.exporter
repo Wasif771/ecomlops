@@ -1,0 +1,12 @@
+# Custom metrics exporter for model performance and drift detection
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir prometheus-client
+
+COPY src/metrics_exporter.py .
+
+EXPOSE 9100
+
+CMD ["python", "metrics_exporter.py"]

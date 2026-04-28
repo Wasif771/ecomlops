@@ -1,0 +1,107 @@
+# EcoMLOps: Full MLOps stack on single EC2 using Docker Compose
+# Lightweight alternative to Kubernetes for small-scale MLOps
+version: "3.8"
+
+services:
+  # ML Model API
+  ml-api:
+    build: .
+    container_name: ecomlops-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MODEL_PATH=/app/models/iris_model.pkl
+      - DRIFT_CONFIDENCE_THRESHOLD=0.65
+    volumes:
+      - ./models:/app/models
+      - ./metrics:/app/metrics
+    depends_on:
+      - mlflow
+    restart: unless-stopped
+    networks:
+      - ecomlops-network
+
+  # MLflow Experiment Tracking
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.11.0
+    container_name: ecomlops-mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    volumes:
+      - mlflow-data:/mlflow
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    restart: unless-stopped
+    networks:
+      - ecomlops-network
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:v2.50.0
+    container_name: ecomlops-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    restart: unless-stopped
+    networks:
+      - ecomlops-network
+
+  # Grafana Visualization
+  grafana:
+    image: grafana/grafana:10.3.0
+    container_name: ecomlops-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=ecomlops123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - ecomlops-network
+
+  # Custom Metrics Exporter for model/drift metrics
+  metrics-exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile.exporter
+    container_name: ecomlops-exporter
+    ports:
+      - "9100:9100"
+    volumes:
+      - ./metrics:/app/metrics:ro
+    restart: unless-stopped
+    networks:
+      - ecomlops-network
+
+volumes:
+  mlflow-data:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  ecomlops-network:
+    driver: bridge
