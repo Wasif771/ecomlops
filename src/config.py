@@ -26,7 +26,7 @@ class Config:
     )
 
     # AWS
-    AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+    AWS_REGION = os.getenv("AWS_REGION", "eu-north-1")
     ECR_REPOSITORY = os.getenv("ECR_REPOSITORY", "ecomlops")
 
     # Retraining
