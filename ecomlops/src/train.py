@@ -60,7 +60,7 @@ def train_and_evaluate():
         mlflow.log_metrics(metrics)
 
         # Save model artifact
-        model_path = "/tmp/iris_model.pkl"
+        model_path = "/app/models/iris_model.pkl"
         with open(model_path, "wb") as f:
             pickle.dump(model, f)
         mlflow.log_artifact(model_path)
