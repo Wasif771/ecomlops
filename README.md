@@ -1,5 +1,7 @@
 # EcoMLOps: A Lightweight Cost-Optimized MLOps Pipeline
 
+> Submitted for the MLOps course, in our MS-AI at National University of Computer and Emerging Sciences.
+
 **A complete MLOps workflow on AWS EC2 using Docker Compose, MLflow, Prometheus, Grafana, GitHub Actions, and Amazon ECR — designed as a lightweight alternative to Kubernetes for small-scale ML deployment.**
 
 ---
