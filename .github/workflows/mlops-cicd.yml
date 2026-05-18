@@ -9,8 +9,8 @@ on:
   pull_request:
     branches: [main, master]
   # Scheduled retraining trigger (nightly)
-  schedule:
-    - cron: "0 2 * * *"
+  # schedule:
+  #   - cron: "0 2 * * *"
   # Allow manual trigger for drift-based retraining
   workflow_dispatch:
     inputs:
